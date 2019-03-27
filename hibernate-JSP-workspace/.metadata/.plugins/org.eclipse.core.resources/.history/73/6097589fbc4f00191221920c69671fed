@@ -1,0 +1,112 @@
+package com.evry;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
+public class Register extends HttpServlet {
+
+	private static final long serialVersionUID = 1L;
+
+	PatientPOJO  obj=new PatientPOJO();
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		//System.out.println("bloodgp--"+request.getParameter("bloodgp"));
+		String Pname=request.getParameter("name");
+		String PbloodGp=request.getParameter("bloodgp");
+		String PcheckUp=request.getParameter("checkup");
+		String Pdoctor=request.getParameter("doctor");
+		String Ptest=request.getParameter("test");
+		String number=request.getParameter("age");
+		//String number = "10";
+		int Page = Integer.parseInt(number);			
+		//System.out.println(Page);
+		System.out.println(" "+Pname+" "+PbloodGp+" "+PcheckUp+" "+Pdoctor+" "+Ptest+" "+Page+"");
+		
+    	StandardServiceRegistry sr= new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
+    	Metadata meta = new MetadataSources(sr).getMetadataBuilder().build(); 
+    	
+    	SessionFactory factory = meta.getSessionFactoryBuilder().build();  
+    	Session session = factory.openSession();  
+    	Transaction t = session.beginTransaction(); 
+    	
+		obj.setPatientName(Pname);
+		obj.setPatientAge(Page);
+		obj.setPatientBloodGroup(PbloodGp);
+		obj.setCheckUp(PcheckUp);
+		obj.setDoctor(Pdoctor);
+		obj.setTest(Ptest);
+		
+		
+		
+		
+		
+		
+		String errorMsg = null;
+/*		if(email == null || email.equals("")){
+			errorMsg = "Email ID can't be null or empty.";
+		}
+		if(password == null || password.equals("")){
+			errorMsg = "Password can't be null or empty.";
+		}
+		if(name == null || name.equals("")){
+			errorMsg = "Name can't be null or empty.";
+		}
+		if(country == null || country.equals("")){
+			errorMsg = "Country can't be null or empty.";
+		}*/
+		
+		if(errorMsg != null){
+			//RequestDispatcher rd = getServletContext().getRequestDispatcher("/register.html");
+			PrintWriter out= response.getWriter();
+			out.println("<font color=red>"+errorMsg+"</font>");
+		//	rd.include(request, response);
+		}else{
+		
+/*		Connection con = (Connection) getServletContext().getAttribute("DBConnection");
+		PreparedStatement ps = null;
+		try {
+			ps = con.prepareStatement("insert into Users(name,email,country, password) values (?,?,?,?)");
+			ps.setString(1, name);
+			ps.setString(2, email);
+			ps.setString(3, country);
+			ps.setString(4, password);
+			
+			ps.execute();
+			
+			logger.info("User registered with email="+email);
+			
+			//forward to login page to login
+			RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
+			PrintWriter out= response.getWriter();
+			out.println("<font color=green>Registration successful, please login below.</font>");
+			rd.include(request, response);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.error("Database connection problem");
+			throw new ServletException("DB Connection problem.");
+		}finally{
+			try {
+				ps.close();
+			} catch (SQLException e) {
+				logger.error("SQLException in closing PreparedStatement");
+			}
+		}*/
+		}
+		
+	}
+}
